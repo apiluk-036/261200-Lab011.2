@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+allprojects {
+    apply plugin: "java"
+    sourceCompatibility = 17
+
+    repositories {
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+}
+
+ext {
+    gdxVersion = '1.12.1'
+}
+
+dependencies {
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ["core/src/main/java"]
+        resources.srcDirs = ["core/assets"]
+    }
+}
+
+task run(type: JavaExec) {
+    mainClass = "com.mygdx.game.DesktopLauncher"
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = "core/assets"
+    ignoreExitValue = true
+}
